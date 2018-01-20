@@ -70,24 +70,10 @@ public class Producto {
     public boolean modificarProducto(String id, String nombre, int precio){
         Conexion bd = new Conexion();
         boolean resultado = false;
-                
-        if((!nombre.equals(null) || !nombre.equals("")) && ((precio == 0) )){
-            resultado =  bd.actualizarBD("UPDATE Productos SET Nombre = '"+nombre+"' WHERE IdProducto = '"+id+"'");
-            bd.cerrarConexion();
-            return resultado;
-        }
         
-        if((nombre.equals(null) || nombre.equals("")) && ((precio > 0) )){
-            resultado = bd.actualizarBD("UPDATE Productos SET precio = '"+precio+"' WHERE IdProducto = '"+id+"'");
-            bd.cerrarConexion();
-            return resultado;
-        }
+        resultado = bd.actualizarBD("UPDATE Productos SET Nombre = '"+nombre+"', Precio = '"+precio+"' WHERE IdProducto = '"+id+"'");
+        bd.cerrarConexion();
         
-        if((!nombre.equals(null) || !nombre.equals("")) && ((precio > 0) )){
-            resultado = bd.actualizarBD("UPDATE Productos SET Nombre = '"+nombre+"', Precio = '"+precio+"' WHERE IdProducto = '"+id+"'");
-            bd.cerrarConexion();
-            return resultado;
-        }
         
         bd.cerrarConexion();
         return resultado;
