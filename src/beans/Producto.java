@@ -74,8 +74,6 @@ public class Producto {
         resultado = bd.actualizarBD("UPDATE Productos SET Nombre = '"+nombre+"', Precio = '"+precio+"' WHERE IdProducto = '"+id+"'");
         bd.cerrarConexion();
         
-        
-        bd.cerrarConexion();
         return resultado;
     }
     
