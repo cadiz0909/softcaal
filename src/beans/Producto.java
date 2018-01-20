@@ -69,9 +69,8 @@ public class Producto {
     
     public boolean modificarProducto(String id, String nombre, int precio){
         Conexion bd = new Conexion();
-        boolean resultado = false;
         
-        resultado = bd.actualizarBD("UPDATE Productos SET Nombre = '"+nombre+"', Precio = '"+precio+"' WHERE IdProducto = '"+id+"'");
+        boolean resultado = bd.actualizarBD("UPDATE Productos SET Nombre = '"+nombre+"', Precio = '"+precio+"' WHERE IdProducto = '"+id+"'");
         bd.cerrarConexion();
         
         return resultado;
