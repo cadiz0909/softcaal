@@ -24,7 +24,7 @@ public class Conexion {
     public Conexion() {
 
         DB_driver = "com.mysql.jdbc.Driver";
-        url = "jdbc:mysql://localhost:3306/usuario";
+        url = "jdbc:mysql://localhost:3306/YoguisBD";
         username = "root";
         password = "123456";
         //Asignacin del Driver
