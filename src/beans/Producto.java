@@ -7,6 +7,7 @@ package beans;
 import beans.Conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,7 +58,15 @@ public class Producto {
     public void setPrecio(int precio) {
         this.precio = precio;
     }
+    
+    public String toString(){
+        return this.idProducto + " " + this.nombre + " " + this.precio;
+    }
 
+    /**
+     * Este metodo crea un nuevo producto
+     * @return boolean, true si se crea el producto, false en caso contrario 
+     */
     public boolean crearProducto(){
         Conexion bd= new Conexion();
         
@@ -66,21 +75,100 @@ public class Producto {
         bd.cerrarConexion();
         return insertar;
     }
+    /**
+     * Permite modificar un producto ya creado.
+     * @param id busca el producto que se desea modificar en base de datos
+     * @param nombre contiene el valor a modificar
+     * @param precio contiene el valor a modificar
+     * @return true en caso de que se halla modificado el producto, false en caso contrario.
+     */
     
     public boolean modificarProducto(String id, String nombre, int precio){
         Conexion bd = new Conexion();
+        boolean resultado = false;
         
-        boolean resultado = bd.actualizarBD("UPDATE Productos SET Nombre = '"+nombre+"', Precio = '"+precio+"' WHERE IdProducto = '"+id+"'");
+        resultado = bd.actualizarBD("UPDATE Productos SET Nombre = '"+nombre+"', Precio = '"+precio+"' WHERE IdProducto = '"+id+"'");
         bd.cerrarConexion();
         
         return resultado;
     }
     
+    /**
+     * Elimina un producto de la base de datos
+     * @param id obtiene el producto que se desea eliminar
+     * @return true si se elimino el producto
+     */
     public boolean eliminarProducto(String id){
         Conexion bd= new Conexion();
         
         boolean eliminar = bd.actualizarBD("DELETE from Productos WHERE IdProducto = '"+ id + "'");
         
         return eliminar;
+    }
+    
+    /**
+     * Obtiene todos los productos 
+     * @return lista de productos
+     */
+    public ArrayList<Producto> getProductos(){
+        
+        Conexion bd= new Conexion();
+        ArrayList<Producto> listaObjeto = new ArrayList<Producto>();
+        Producto objeto;
+        String id;
+        String nomb;
+        int price;
+        
+        ResultSet consulta = bd.consultarBD("SELECT * FROM Productos ");
+        
+        try {
+            while(consulta.next()){
+                
+                id = consulta.getString("IdProducto");
+                nomb = consulta.getString("Nombre");
+                price = consulta.getInt("Precio");
+                
+                objeto = new Producto(id,nomb,price);
+                listaObjeto.add(objeto);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return listaObjeto;
+    }
+    
+    
+    /**
+     * Busca todos lo productos que contienen en el nombre la frase que se lepasa como argumento.
+     * @param nombre , contiene la palabra que se compara con el nombre de los productos en la base de datos
+     * @return retorna un alista de productos que contienen en su nombre la frase pasada en el argumento.
+     */
+    public ArrayList<Producto> listarProductosNombre(String nombre){
+        
+        Conexion bd= new Conexion();
+        ArrayList<Producto> listaObjeto = new ArrayList<Producto>();
+        Producto objeto;
+        String id;
+        String nomb;
+        int price;
+        
+        ResultSet consulta = bd.consultarBD("SELECT * FROM Productos WHERE Nombre LIKE '%"+nombre+"%'");
+        
+        try {
+            while(consulta.next()){
+                
+                id = consulta.getString("IdProducto");
+                nomb = consulta.getString("Nombre");
+                price = consulta.getInt("Precio");
+                
+                objeto = new Producto(id,nomb,price);
+                listaObjeto.add(objeto);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return listaObjeto;
     }
 }
