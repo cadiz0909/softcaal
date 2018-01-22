@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * La clase Producto se encarga del manejo de la tabla de Producto en base de datos. 
+ * Realiza funciones como:
+ * creación, modificación, eliminación, busqueda de Productos por nombre.
  */
 package beans;
 import beans.Conexion;
@@ -85,7 +85,7 @@ public class Producto {
     
     public boolean modificarProducto(String id, String nombre, int precio){
         Conexion bd = new Conexion();
-        boolean resultado = false;
+        boolean resultado;
         
         resultado = bd.actualizarBD("UPDATE Productos SET Nombre = '"+nombre+"', Precio = '"+precio+"' WHERE IdProducto = '"+id+"'");
         bd.cerrarConexion();
@@ -102,6 +102,8 @@ public class Producto {
         Conexion bd= new Conexion();
         
         boolean eliminar = bd.actualizarBD("DELETE from Productos WHERE IdProducto = '"+ id + "'");
+        
+        bd.cerrarConexion();
         
         return eliminar;
     }
@@ -134,6 +136,8 @@ public class Producto {
         } catch (SQLException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        bd.cerrarConexion();
         
         return listaObjeto;
     }
@@ -168,6 +172,43 @@ public class Producto {
         } catch (SQLException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        bd.cerrarConexion();
+        
+        return listaObjeto;
+    }
+    
+    /**
+     * Busca todos lo productos que contienen los precios similares.
+     * @param precio , precio a comparar
+     * @return lista de productos.
+     */
+    public ArrayList<Producto> listarProductosPrecio(int precio){
+        
+        Conexion bd= new Conexion();
+        ArrayList<Producto> listaObjeto = new ArrayList<Producto>();
+        Producto objeto;
+        String id;
+        String nomb;
+        int price;
+        
+        ResultSet consulta = bd.consultarBD("SELECT * FROM Productos WHERE Precio LIKE '%"+precio+"%'");
+        
+        try {
+            while(consulta.next()){
+                
+                id = consulta.getString("IdProducto");
+                nomb = consulta.getString("Nombre");
+                price = consulta.getInt("Precio");
+                
+                objeto = new Producto(id,nomb,price);
+                listaObjeto.add(objeto);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        bd.cerrarConexion();
         
         return listaObjeto;
     }
