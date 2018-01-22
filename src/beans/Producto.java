@@ -192,7 +192,7 @@ public class Producto {
         String nomb;
         int price;
         
-        ResultSet consulta = bd.consultarBD("SELECT * FROM Productos WHERE Precio LIKE '%"+precio+"%'");
+        ResultSet consulta = bd.consultarBD("SELECT * FROM Productos WHERE Precio = '"+precio+"'");
         
         try {
             while(consulta.next()){
