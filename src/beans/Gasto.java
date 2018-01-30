@@ -27,6 +27,13 @@ public class Gasto {
     public Gasto() {
     }
 
+    public Gasto(String idGasto, String nombre, String tipo, int valor) {
+        this.idGasto = idGasto;
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.valor = valor;
+    }
+    
     public Gasto(String idGasto, String nombre, String tipo, Date fecha, int valor) {
         this.idGasto = idGasto;
         this.nombre = nombre;
@@ -75,18 +82,21 @@ public class Gasto {
         this.valor = valor;
     }
     
+    public String toString(){
+        return this.idGasto + " " + this.nombre + " " + this.tipo + " " + this.fecha + " " + this.valor;
+    }
     /**
      * Crea un nuevo gasto en BD
      * @return true, si se realizo 
      */
-    public boolean crearGastro(){
+    public boolean crearGasto(){
         Conexion bd= new Conexion();
-        
-        boolean insertar = bd.insertarBD("INSERT INTO Gastos (IdGasto, Nombre, Tipo, Fecha, Valor) "
-                + "VALUES('"+getIdGasto()+"', '"+getNombre()+"','"+getTipo()+"', '"+getFecha()+"', '"+getValor()+"')");
+        String sentencia = "INSERT INTO Gastos (IdGasto, Nombre, Tipo, Fecha, Valor) "
+                + "VALUES('"+getIdGasto()+"', '"+getNombre()+"','"+getTipo()+"', DATE(NOW()), '"+getValor()+"')";
+        boolean insertar = bd.insertarBD(sentencia);
         bd.cerrarConexion();
         
-        return false;
+        return insertar;
     }
     
     /**
@@ -155,7 +165,7 @@ public class Gasto {
      * @return ArrayList<Gastos>
      */
     
-    public ArrayList<Gasto> listarGastosFecha(String tipo, Date fecha){
+    public ArrayList<Gasto> listarGastosFecha(Date fecha){
         
         Conexion bd= new Conexion();
         ArrayList<Gasto> listaObjeto = new ArrayList<Gasto>();
