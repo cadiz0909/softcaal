@@ -1,4 +1,5 @@
-/*
+/*Consulta todos los gastos del día por fecha, por tipo y solo por fecha.
+ *
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -82,6 +83,7 @@ public class Gasto {
         this.valor = valor;
     }
     
+    @Override
     public String toString(){
         return this.idGasto + " " + this.nombre + " " + this.tipo + " " + this.fecha + " " + this.valor;
     }
@@ -124,7 +126,7 @@ public class Gasto {
      * @return ArrayList<Gato>
      */
     
-    public ArrayList<Gasto> listarGastosTipo(String tipo, Date fecha){
+    public ArrayList<Gasto> listarGastosTipo(String tipo, String fecha){
         
         Conexion bd= new Conexion();
         ArrayList<Gasto> listaObjeto = new ArrayList<Gasto>();
@@ -160,12 +162,11 @@ public class Gasto {
     
     /**
      * Permite listar todos los gastos del día.
-     * @param tipo
      * @param fecha
-     * @return ArrayList<Gastos>
+     * @return ArrayList<Gasto>
      */
     
-    public ArrayList<Gasto> listarGastosFecha(Date fecha){
+    public ArrayList<Gasto> listarGastosFecha(String fecha){
         
         Conexion bd= new Conexion();
         ArrayList<Gasto> listaObjeto = new ArrayList<Gasto>();
