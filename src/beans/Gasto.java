@@ -6,7 +6,6 @@
  */
 package beans;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class Gasto {
     private String idGasto;
     private String nombre;
     private String tipo;
-    private Date fecha;
+    private String fecha;
     private int valor;
 
     public Gasto() {
@@ -35,7 +34,7 @@ public class Gasto {
         this.valor = valor;
     }
     
-    public Gasto(String idGasto, String nombre, String tipo, Date fecha, int valor) {
+    public Gasto(String idGasto, String nombre, String tipo, String fecha, int valor) {
         this.idGasto = idGasto;
         this.nombre = nombre;
         this.tipo = tipo;
@@ -67,11 +66,11 @@ public class Gasto {
         this.tipo = tipo;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -83,10 +82,7 @@ public class Gasto {
         this.valor = valor;
     }
     
-    @Override
-    public String toString(){
-        return this.idGasto + " " + this.nombre + " " + this.tipo + " " + this.fecha + " " + this.valor;
-    }
+
     /**
      * Crea un nuevo gasto en BD
      * @return true, si se realizo 
@@ -134,7 +130,7 @@ public class Gasto {
         String id;
         String nomb;
         String tip;
-        Date fech;
+        String fech;
         int val;
         
         ResultSet consulta = bd.consultarBD("SELECT * FROM Gastos WHERE Tipo = '"+tipo+"' AND Fecha = '"+fecha+"'");
@@ -145,7 +141,7 @@ public class Gasto {
                 id = consulta.getString("IdGasto");
                 nomb = consulta.getString("Nombre");
                 tip = consulta.getString("Tipo");
-                fech = consulta.getDate("Fecha");
+                fech = consulta.getString("Fecha");
                 val = consulta.getInt("Valor");
                 
                 objeto = new Gasto(id, nomb, tip, fech, val);
@@ -163,18 +159,19 @@ public class Gasto {
     /**
      * Permite listar todos los gastos del día.
      * @param fecha
-     * @return ArrayList<Gasto>
+     * @return ArrayList
      */
     
     public ArrayList<Gasto> listarGastosFecha(String fecha){
         
         Conexion bd= new Conexion();
-        ArrayList<Gasto> listaObjeto = new ArrayList<Gasto>();
+        ArrayList<Gasto> listaObjeto;
+        listaObjeto = new ArrayList<>();
         Gasto objeto;
         String id;
         String nomb;
         String tip;
-        Date fech;
+        String fech;
         int val;
         
         ResultSet consulta = bd.consultarBD("SELECT * FROM Gastos WHERE Fecha = '"+fecha+"'");
@@ -185,7 +182,7 @@ public class Gasto {
                 id = consulta.getString("IdGasto");
                 nomb = consulta.getString("Nombre");
                 tip = consulta.getString("Tipo");
-                fech = consulta.getDate("Fecha");
+                fech = consulta.getString("Fecha");
                 val = consulta.getInt("Valor");
                 
                 objeto = new Gasto(id, nomb, tip, fech, val);
