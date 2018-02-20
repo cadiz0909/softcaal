@@ -91,15 +91,20 @@ public class Ingrediente {
     }
     
     /**
-     * Elimina un Ingrediente de la base de datos
+     * Elimina un Ingrediente de la base de datos, despues de haber eliminado 
+     * su relacion con los respectivos prodcutos en ProductoIngrediente
      * @param id , Ingrediente a eliminar
      * @return true si se elimino el ingrediente
      */
-    public boolean eliminarIngrediente(String id){
+    public boolean eliminarIngrediente(String idIngrediente){
         Conexion bd= new Conexion();
-        
-        boolean eliminar = bd.actualizarBD("DELETE from Ingredientes WHERE IdIngrediente = '"+ id + "'");
-        
+        boolean eliminar = false;
+        boolean exito = bd.actualizarBD("DELETE FROM ProductoIngrediente WHERE IdIngrediente = '"+ idIngrediente + "'");
+        boolean exito2 = bd.actualizarBD("DELETE FROM Adicionales WHERE IdIngrediente = '"+ idIngrediente + "'");
+                
+        if(exito && exito2){
+            eliminar = bd.actualizarBD("DELETE FROM Ingredientes WHERE IdIngrediente = '"+ idIngrediente + "'");
+        }
         bd.cerrarConexion();
         
         return eliminar;
