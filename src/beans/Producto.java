@@ -100,9 +100,11 @@ public class Producto {
      */
     public boolean eliminarProducto(String id){
         Conexion bd= new Conexion();
+        boolean eliminar = false;
+        if(eliminarProductoIngrediente(id)){
         
-        boolean eliminar = bd.actualizarBD("DELETE from Productos WHERE IdProducto = '"+ id + "'");
-        
+            eliminar = bd.actualizarBD("DELETE from Productos WHERE IdProducto = '"+ id + "'");
+        }
         bd.cerrarConexion();
         
         return eliminar;
@@ -212,4 +214,37 @@ public class Producto {
         
         return listaObjeto;
     }
+    
+    /**
+     * Agregar la relacion de cada producto con sus respectivos ingredientes en la talba de ProductoIngrediente
+     * @param idProducto
+     * @param idIngrediente
+     * @return boolean
+     */
+    
+    public boolean agregarProductoIngrediente(String idProducto, String idIngrediente){
+        
+        Conexion bd= new Conexion();
+        String sentencia = "INSERT INTO ProductoIngrediente (IdProducto, IdIngrediente) VALUES('"+ idProducto +"', '"+ idIngrediente+ ")";
+        boolean resultado = bd.actualizarBD(sentencia);
+        bd.cerrarConexion();
+        
+        return resultado;
+    }
+    
+    /**
+     * Elimina la relacion de un producto con cadaingrediente en la tabla de ProductoIngrediente
+     * @param idProducto
+     * @return boolean
+     */
+    public boolean eliminarProductoIngrediente(String idProducto){
+        Conexion bd= new Conexion();
+        String sentencia = "DELETE FROM ProductoIngrediente WHERE IdProducto = '"+idProducto+"'";
+        boolean resultado = bd.actualizarBD(sentencia);
+        bd.cerrarConexion();
+        
+        return resultado;
+    }
+    
+    
 }
