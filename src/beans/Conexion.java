@@ -10,36 +10,25 @@ import java.sql.*;
 public class Conexion {
 
     // Configuracion de la conexion a la base de datos 
-    private String DB_driver = "";
     private String url = "";
     private String username = "";
     private String password = "";
     public Connection con = null;
     private Statement stmt = null;
-    private PreparedStatement pstmt = null;
     private ResultSet rs = null;
-    private String query = null;
 
     //Constructor sin parmetros		
     public Conexion() {
 
-        DB_driver = "com.mysql.jdbc.Driver";
-        url = "jdbc:mysql://localhost:3306/YoguisBD";
+        url = "jdbc:mysql://localhost:3306/pruebas?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         username = "root";
-        password = "123456";
-        //Asignacin del Driver
-        try {
-            Class.forName(DB_driver);
-        } catch (ClassNotFoundException cnfx) {
-            //System.out.println("No se pudo cargar el Driver Correctamente!");
-        }
-        // Realizar la conexin
+        password = "Mille1991*";
+        
+        // Realizar la conexión
         try {
             con = DriverManager.getConnection(url, username, password);
-            con.setTransactionIsolation(8);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
 
     }
@@ -55,8 +44,8 @@ public class Conexion {
             if (con != null) {
                 con.close();
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SQLException ex) {
+             System.out.println(ex.getMessage());
         }
     }
 
@@ -71,11 +60,11 @@ public class Conexion {
             stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = stmt.executeQuery(sentencia);
         } catch (SQLException sqlex) {
-            sqlex.printStackTrace();
+            System.out.println(sqlex.getMessage());
         } catch (RuntimeException rex) {
-            rex.printStackTrace();
+            System.out.println(rex.getMessage());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
 
         return rs;
@@ -86,14 +75,8 @@ public class Conexion {
         try {
             stmt = con.createStatement();
             stmt.execute(sentencia);
-        } catch (SQLException sqlex) {
-            //System.out.println("ERROR RUTINA: "+ sqlex);
-            return false;
-        } catch (RuntimeException rex) {
-            //System.out.println("ERROR RUTINA: "+ rex);
-            return false;
-        } catch (Exception ex) {
-            //System.out.println("EXCEPCION: "+ ex);
+        } catch (SQLException | RuntimeException sqlex) {
+            System.out.println("ERROR RUTINA: "+ sqlex);
             return false;
         }
         return true;
@@ -105,14 +88,8 @@ public class Conexion {
          try {
             stmt = con.createStatement();
             stmt.executeUpdate(sentencia);
-        } catch (SQLException sqlex) {
+        } catch (SQLException | RuntimeException sqlex) {
             System.out.println("ERROR RUTINA: " + sqlex);
-            return false;
-        } catch (RuntimeException rex) {
-            System.out.println("ERROR RUTINA: " + rex);
-            return false;
-        } catch (Exception ex) {
-            System.out.println("EXCEPCION: " + ex);
             return false;
         }
         return true;
