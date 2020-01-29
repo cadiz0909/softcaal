@@ -20,7 +20,7 @@ public class Conexion {
     //Constructor sin parmetros		
     public Conexion() {
 
-        url = "jdbc:mysql://localhost:3306/pruebas?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+        url = "jdbc:mysql://localhost:3306/yoguisbd?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         username = "root";
         password = "Mille1991*";
         

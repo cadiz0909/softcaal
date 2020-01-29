@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 package caal;
-import beans.Conexion;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import java.awt.BorderLayout;
+import javax.swing.*;
+import windows.ClienteWindows;
+
 /**
  *
  * @author carlos
@@ -19,21 +19,17 @@ public class Caal {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        Conexion bd= new Conexion();
-        
-        ResultSet m= bd.consultarBD("SELECT * FROM usu ");
-        
-        try {
-            while(m.next()){
-               System.out.println(m.getString("Id"));
-               System.out.println(m.getString("Nombre"));
-               System.out.println(m.getString("Genero"));
-               System.out.println(m.getString("Telefono"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Caal.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        JFrame f = new JFrame("Gestor Yoguis");
+        f.setSize(500, 400);
+        f.setLocation(150, 100);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+
+        //Panel con etiquetas
+        JTabbedPane pVista = new JTabbedPane();
+        f.add(pVista, BorderLayout.CENTER);//Agregamos al panel nuestro objeto JTabbedPane
+        pVista.addTab("Panel cliente", new ClienteWindows());
     }
-    
+
 }

@@ -55,7 +55,7 @@ public class Prefijo {
         
         String prefijo = new String();
         int actual= 0;
-        String id= new String();
+        String id= null;
         
         Conexion con= new Conexion();
         

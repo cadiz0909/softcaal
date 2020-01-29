@@ -90,10 +90,18 @@ public class Cliente {
         
         Conexion con = new Conexion();
         
+        Prefijo prefijo = new Prefijo();
+        
+        String id = prefijo.CrearId("clientes");
+                
         String sentencia = "INSERT INTO Clientes (IdCliente,Cedula,Nombre,Direccion,Telefono,Celular) "
-                + "VALUES ('"+ this.IdCliente +"','"+ this.Cedula +"','"+ this.Nombres +"','"+ this.Direccion + "','"+ this.Telefono +"','"+ this.Celular +"')";
+                + "VALUES ('"+ id +"','"+ this.Cedula +"','"+ this.Nombres +"','"+ this.Direccion + "','"+ this.Telefono +"','"+ this.Celular +"')";
         
         boolean exito= con.insertarBD(sentencia);
+        
+        if(exito){
+            prefijo.ActualizarConsecutivo("clientes");
+        }
         con.cerrarConexion();
         
         return exito;
@@ -162,6 +170,8 @@ public class Cliente {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            con.cerrarConexion();
         }
         
         return clientes;
@@ -193,6 +203,8 @@ public class Cliente {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            con.cerrarConexion();
         }
         
         return clientes;
@@ -224,9 +236,33 @@ public class Cliente {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            con.cerrarConexion();
         }
         
         return clientes;
+    }
+    
+    public boolean existeUsuario(String cedula){
+        
+        Conexion con = new Conexion();
+        
+        String sentencia= "SELECT * FROM Clientes WHERE Cedula = '"+ Cedula.trim() +"%'";
+        
+        ResultSet busqueda= con.consultarBD(sentencia);
+        
+        try {
+            if(busqueda.next()){
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            con.cerrarConexion();
+        }
+        
+        return false;
+        
     }
     
 }
