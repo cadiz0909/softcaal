@@ -8,6 +8,8 @@ package caal;
 import java.awt.BorderLayout;
 import javax.swing.*;
 import windows.ClienteWindows;
+import windows.IngredienteWindows;
+import windows.ProductoWindows;
 
 /**
  *
@@ -29,7 +31,9 @@ public class Caal {
         //Panel con etiquetas
         JTabbedPane pVista = new JTabbedPane();
         f.add(pVista, BorderLayout.CENTER);//Agregamos al panel nuestro objeto JTabbedPane
-        pVista.addTab("Panel cliente", new ClienteWindows());
+        pVista.addTab("Crear cliente", new ClienteWindows());
+        pVista.addTab("Crear ingrediente", new IngredienteWindows());
+        pVista.addTab("Crear producto", new ProductoWindows());
     }
 
 }

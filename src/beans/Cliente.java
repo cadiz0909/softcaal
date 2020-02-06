@@ -14,6 +14,9 @@ import java.util.logging.Logger;
 /**
  *
  * @author carlos
+ * @modif carlos
+ * @date 30/01/2020
+ * @version 2.0
  */
 public class Cliente {
     
@@ -72,9 +75,21 @@ public class Cliente {
         this.Celular = Celular;
     }
 
+    /**
+    Constructor sin parametros
+    */
     public Cliente() {
     }
 
+    /**
+     * Constructor
+     * @param IdCliente
+     * @param Cedula
+     * @param Nombres
+     * @param Direccion
+     * @param Telefono
+     * @param Celular 
+     */
     public Cliente(String IdCliente, String Cedula, String Nombres, String Direccion, String Telefono, String Celular) {
         this.IdCliente = IdCliente;
         this.Cedula = Cedula;
@@ -243,17 +258,24 @@ public class Cliente {
         return clientes;
     }
     
+   /**
+    * Verifica si el usuario existe en base de datos por medio de la cedula
+    * @param cedula
+    * @return 
+    */
     public boolean existeUsuario(String cedula){
+        
+        boolean existe = false;
         
         Conexion con = new Conexion();
         
-        String sentencia= "SELECT * FROM Clientes WHERE Cedula = '"+ Cedula.trim() +"%'";
+        String sentencia= "SELECT * FROM Clientes WHERE Cedula = '"+ Cedula.trim() +"'";
         
         ResultSet busqueda= con.consultarBD(sentencia);
         
         try {
             if(busqueda.next()){
-                return true;
+                existe = true;
             }
         } catch (SQLException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -261,7 +283,7 @@ public class Cliente {
             con.cerrarConexion();
         }
         
-        return false;
+        return existe;
         
     }
     

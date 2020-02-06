@@ -4,7 +4,6 @@
  * creación, modificación, eliminación, busqueda de Productos por nombre.
  */
 package beans;
-import beans.Conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,14 +20,22 @@ public class Producto {
     
     private String idProducto;
     private String nombre;
-    private int precio;
+    private double precio;
     
-    
+    /**
+     * Constructor sin parametros
+     */
     public Producto(){
-        
+        //Empty
     }
     
-    public Producto(String id, String nombre, int precio){
+    /**
+     * Constructor
+     * @param id
+     * @param nombre
+     * @param precio 
+     */
+    public Producto(String id, String nombre, double precio){
         this.idProducto = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -51,7 +58,7 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public int getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
@@ -59,6 +66,7 @@ public class Producto {
         this.precio = precio;
     }
     
+    @Override
     public String toString(){
         return this.idProducto + " " + this.nombre + " " + this.precio;
     }
@@ -68,11 +76,23 @@ public class Producto {
      * @return boolean, true si se crea el producto, false en caso contrario 
      */
     public boolean crearProducto(){
+       
         Conexion bd= new Conexion();
         
+        Prefijo prefijo = new Prefijo();
+        
+        String id = prefijo.CrearId("productos");
+        
         boolean insertar = bd.insertarBD("INSERT INTO Productos (IdProducto, Nombre, Precio) "
-                + "VALUES('"+getIdProducto()+"', '"+getNombre()+"','"+getPrecio()+"')");
+                + "VALUES('"+ id +"', '"+getNombre()+"','"+getPrecio()+"')");
+        
+        if(insertar){
+            prefijo.ActualizarConsecutivo("productos");
+            setIdProducto(id);
+        }
+        
         bd.cerrarConexion();
+        
         return insertar;
     }
     /**
@@ -117,7 +137,7 @@ public class Producto {
     public ArrayList<Producto> getProductos(){
         
         Conexion bd= new Conexion();
-        ArrayList<Producto> listaObjeto = new ArrayList<Producto>();
+        ArrayList<Producto> listaObjeto = new ArrayList<>();
         Producto objeto;
         String id;
         String nomb;
@@ -153,7 +173,7 @@ public class Producto {
     public ArrayList<Producto> listarProductosNombre(String nombre){
         
         Conexion bd= new Conexion();
-        ArrayList<Producto> listaObjeto = new ArrayList<Producto>();
+        ArrayList<Producto> listaObjeto = new ArrayList<>();
         Producto objeto;
         String id;
         String nomb;
@@ -188,11 +208,11 @@ public class Producto {
     public ArrayList<Producto> listarProductosPrecio(int precio){
         
         Conexion bd= new Conexion();
-        ArrayList<Producto> listaObjeto = new ArrayList<Producto>();
+        ArrayList<Producto> listaObjeto = new ArrayList<>();
         Producto objeto;
         String id;
         String nomb;
-        int price;
+        double price;
         
         ResultSet consulta = bd.consultarBD("SELECT * FROM Productos WHERE Precio = '"+precio+"'");
         
@@ -201,7 +221,7 @@ public class Producto {
                 
                 id = consulta.getString("IdProducto");
                 nomb = consulta.getString("Nombre");
-                price = consulta.getInt("Precio");
+                price = consulta.getDouble("Precio");
                 
                 objeto = new Producto(id,nomb,price);
                 listaObjeto.add(objeto);
@@ -225,7 +245,7 @@ public class Producto {
     public boolean agregarProductoIngrediente(String idProducto, String idIngrediente){
         
         Conexion bd= new Conexion();
-        String sentencia = "INSERT INTO ProductoIngrediente (IdProducto, IdIngrediente) VALUES('"+ idProducto +"', '"+ idIngrediente+ ")";
+        String sentencia = "INSERT INTO ProductoIngrediente (IdProducto, IdIngrediente) VALUES('"+ idProducto +"', '"+ idIngrediente+ "')";
         boolean resultado = bd.actualizarBD(sentencia);
         bd.cerrarConexion();
         
@@ -244,6 +264,35 @@ public class Producto {
         bd.cerrarConexion();
         
         return resultado;
+    }
+    
+    /**
+     * Verifica la existencia de un producto por nombre y precio
+     * @param nombre
+     * @param precio
+     * @return 
+     */
+    public boolean existeProducto(String nombre, double precio ){
+        
+        boolean existe = false;
+        
+        Conexion con = new Conexion();
+        
+        String sentencia= "SELECT * FROM Productos WHERE Nombre = '"+ nombre.trim() +"' and Precio = '" + precio + "'";
+        
+        ResultSet busqueda= con.consultarBD(sentencia);
+        
+        try {
+            if(busqueda.next()){
+                existe = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            con.cerrarConexion();
+        }
+        
+        return existe;
     }
     
     
